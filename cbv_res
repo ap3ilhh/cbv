@@ -1,0 +1,307 @@
+
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Πρόγραμμα γηπέδων</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="shortcut icon" type="image/x-icon" href="http://res.beachvolleychania.com/images/fav.ico" />
+        <link type="text/css" rel="stylesheet" href="http://res.beachvolleychania.com/style/style.css"/>
+        <link type="text/css" href="http://res.beachvolleychania.com/style/smoothness/jquery-ui-1.8.1.custom.css" rel="stylesheet" />
+        <link  rel="stylesheet" href="http://res.beachvolleychania.com/style/print.css" type="text/css" media="print" />
+        <script type="text/javascript" src="http://res.beachvolleychania.com/jscripts/jquery-1.7.1.min.js"></script>
+        <script type="text/javascript" src="http://res.beachvolleychania.com/jscripts/jquery-ui-1.8.1.custom.min.js"></script>
+        <script type="text/javascript" src="http://res.beachvolleychania.com/jscripts/jquery.qtip-1.0.0-rc3.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('#loadbar').ajaxSend(function() {
+                    $("#loadbar").dialog({
+                        resizable: false,
+                        modal: true
+                    });
+                    $(".ui-dialog-titlebar").hide();
+                });
+                $('#loadbar').ajaxStop(function() {
+                    $("#loadbar").dialog('close');
+                    $(".ui-dialog-titlebar").show();
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div id="loadbar" style="display: none;">
+            Παρακαλώ περιμένετε...        </div>
+        <div id="json_response" style="display: none;" title="">
+        </div>
+        <div id="doc">
+            <div id="header">
+                <div id="logo">
+    <a href="/"><img src="http://res.beachvolleychania.com/images/logo.gif" alt="Logo"/>
+        <div>
+            <span class="title">Beach Volley Chania Reservations</span>
+            <span class="subtitle">Σύστημα διαχείρισης κρατήσεων γηπέδων</span>
+        </div>
+    </a>
+</div>
+<div class="headerRight">
+    <div id="lang-selection" style="padding:0 0 50px 350px;">
+        <script type="text/javascript">
+            function lang(lg) {
+		document.cookie="lang"+ "=" +escape(lg);
+//                Browser.Cookies.create("lang", lg, 30);
+                location.reload();
+            }
+        </script>
+        <a href="javascript:lang('el-GR');"><img src="http://res.beachvolleychania.com/images/el.gif" title="Ελληνικά" alt="Ελληνικά"/></a>
+        <a href="javascript:lang('en-US');"><img src="http://res.beachvolleychania.com/images/en.gif" title="English" alt="English"/></a>
+    </div>
+        <div id="headerUserDetailsForm">
+        <span>Έχετε συνδεθεί ως: </span><span class="uname">tgkantzios</span>
+        <br />
+        <span class="login-links"><a href="http://res.beachvolleychania.com/auth/logout">Αποσύνδεση</a></span>
+    </div>
+        </div>
+            </div>
+            <div id="main-nav">
+                <div id="navigation">
+                    <ul id="nav">
+    <li class="first">
+        <a href="http://res.beachvolleychania.com/">Αρχική</a>
+        <ul style="display:none;">
+            <li>
+                <a href="">Αρχική</a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="http://res.beachvolleychania.com/schedule">Πρόγραμμα γηπέδων</a>
+        <ul style="display:none;">
+            <li>
+                <a href="">Πρόγραμμα γηπέδων</a>
+            </li>
+        </ul>
+    </li>
+            <li>
+        <a href="http://res.beachvolleychania.com/profile">Το προφίλ μου</a>
+    </li>
+    <li>
+        <a href="http://res.beachvolleychania.com/lastprog">Τελευταίο πρόγραμμα</a>
+    </li>
+            <li>
+        <a href="/rules">Κανόνες</a>
+    </li>
+</ul>
+                </div>
+            </div>
+            <div id="main-content">
+                <script type="text/javascript">
+    /* <![CDATA[ */
+    var sc_id = 0;
+
+    function delete_reservation(sid) {
+        sc_id = sid;
+
+        $("#delete_reservation").dialog({
+            resizable: false,
+            width: 400,
+            modal: true,
+            buttons: {
+                'Άκυρο': function() {
+                    $(this).dialog('close');
+                },
+                'Διαγραφή': function() {
+                    var reason = $('#reason').val();
+
+                    $(this).dialog('close');
+                    $.ajax({
+                        type: "POST",
+                        url: 'http://res.beachvolleychania.com/ajax',
+                        data: "action=delete_reservation&sc_id=" + sc_id + "&reason=" + encodeURI(reason),
+                        success: function(data) {
+                            location.reload();
+                        }
+                    });
+                }
+            }
+        });
+    };
+    /* ]]> */
+</script>
+<div style="display:none;" id="delete_reservation" title="Επιβεβαίωση διαγραφής κράτησης">
+    <p>Είστε σίγουροι ότι θέλετε να διαγράψετε την κράτηση;</p>
+    <table class="popup-table">
+        <tr>
+            <td valign="top" align="right">Αιτία Διαγραφής:<br />(προαιρετικό)</td>
+            <td><textarea id="reason" name="reason" cols="30" rows="3"></textarea></td>
+        </tr>
+    </table>
+</div>
+<div id="content">
+    <h1 class="contentHead">Πρόγραμμα γηπέδων</h1>
+    <h2 class="sdate">
+        Κυριακή&nbsp;15-1-2023    </h2>
+    <table id="timetable" cellspacing="0">
+        <thead>
+            <tr>
+                <th class="first" width="60px">&nbsp;<br />&nbsp;</th>
+                <th rowspan='2' width='200px'>Γήπεδο 1</th><th rowspan='2' width='200px'>Γήπεδο 2</th><th rowspan='2' width='200px'>Γήπεδο 3</th><th rowspan='2' width='200px'>Γήπεδο 4</th><th rowspan='2' width='200px'>Γήπεδο 5</th>            </tr>
+            <tr><th class="first">13:30</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+<td class='time'>13:45</td>
+                    <td class='slot available' rowspan='6'>
+                        <span class="time">13:30-15:00</span><a href="http://res.beachvolleychania.com/schedule/new/101704">Κράτηση!</a>                    </td>
+                                        <td class='slot available' rowspan='6'>
+                        <span class="time">13:30-15:00</span><a href="http://res.beachvolleychania.com/schedule/new/101709">Κράτηση!</a>                    </td>
+                                        <td class='slot available' rowspan='6'>
+                        <span class="time">13:30-15:00</span><a href="http://res.beachvolleychania.com/schedule/new/101699">Κράτηση!</a>                    </td>
+                                        <td class='slot available' rowspan='6'>
+                        <span class="time">13:30-15:00</span><a href="http://res.beachvolleychania.com/schedule/new/101714">Κράτηση!</a>                    </td>
+                                        <td class='slot available' rowspan='6'>
+                        <span class="time">13:30-15:00</span><a href="http://res.beachvolleychania.com/schedule/new/101694">Κράτηση!</a>                    </td>
+                    </tr>
+<tr>
+<td class='time'>14:00</td>
+</tr>
+<tr>
+<td class='time'>14:15</td>
+</tr>
+<tr>
+<td class='time'>14:30</td>
+</tr>
+<tr>
+<td class='time'>14:45</td>
+</tr>
+<tr>
+<td class='time'>15:00</td>
+</tr>
+<tr>
+<td class='time'>15:15</td>
+                    <td class='slot available' rowspan='6'>
+                        <span class="time">15:00-16:30</span><a href="http://res.beachvolleychania.com/schedule/new/101705">Κράτηση!</a>                    </td>
+                                        <td class='slot available' rowspan='6'>
+                        <span class="time">15:00-16:30</span><a href="http://res.beachvolleychania.com/schedule/new/101710">Κράτηση!</a>                    </td>
+                                        <td class='slot available' rowspan='6'>
+                        <span class="time">15:00-16:30</span><a href="http://res.beachvolleychania.com/schedule/new/101700">Κράτηση!</a>                    </td>
+                                        <td class='slot available' rowspan='6'>
+                        <span class="time">15:00-16:30</span><a href="http://res.beachvolleychania.com/schedule/new/101715">Κράτηση!</a>                    </td>
+                                        <td class='slot available' rowspan='6'>
+                        <span class="time">15:00-16:30</span><a href="http://res.beachvolleychania.com/schedule/new/101695">Κράτηση!</a>                    </td>
+                    </tr>
+<tr>
+<td class='time'>15:30</td>
+</tr>
+<tr>
+<td class='time'>15:45</td>
+</tr>
+<tr>
+<td class='time'>16:00</td>
+</tr>
+<tr>
+<td class='time'>16:15</td>
+</tr>
+<tr>
+<td class='time'>16:30</td>
+</tr>
+<tr>
+<td class='time'>16:45</td>
+                    <td class='slot available' rowspan='6'>
+                        <span class="time">16:30-18:00</span><a href="http://res.beachvolleychania.com/schedule/new/101706">Κράτηση!</a>                    </td>
+                                        <td class='slot available' rowspan='6'>
+                        <span class="time">16:30-18:00</span><a href="http://res.beachvolleychania.com/schedule/new/101711">Κράτηση!</a>                    </td>
+                                        <td class='slot available' rowspan='6'>
+                        <span class="time">16:30-18:00</span><a href="http://res.beachvolleychania.com/schedule/new/101701">Κράτηση!</a>                    </td>
+                                        <td class='slot available' rowspan='6'>
+                        <span class="time">16:30-18:00</span><a href="http://res.beachvolleychania.com/schedule/new/101716">Κράτηση!</a>                    </td>
+                                        <td class='slot available' rowspan='6'>
+                        <span class="time">16:30-18:00</span><a href="http://res.beachvolleychania.com/schedule/new/101696">Κράτηση!</a>                    </td>
+                    </tr>
+<tr>
+<td class='time'>17:00</td>
+</tr>
+<tr>
+<td class='time'>17:15</td>
+</tr>
+<tr>
+<td class='time'>17:30</td>
+</tr>
+<tr>
+<td class='time'>17:45</td>
+</tr>
+<tr>
+<td class='time'>18:00</td>
+</tr>
+<tr>
+<td class='time'>18:15</td>
+                    <td class='slot available' rowspan='6'>
+                        <span class="time">18:00-19:30</span><a href="http://res.beachvolleychania.com/schedule/new/101707">Κράτηση!</a>                    </td>
+                                        <td class='slot available' rowspan='6'>
+                        <span class="time">18:00-19:30</span><a href="http://res.beachvolleychania.com/schedule/new/101712">Κράτηση!</a>                    </td>
+                                        <td class='slot available' rowspan='6'>
+                        <span class="time">18:00-19:30</span><a href="http://res.beachvolleychania.com/schedule/new/101702">Κράτηση!</a>                    </td>
+                                        <td class='slot available' rowspan='6'>
+                        <span class="time">18:00-19:30</span><a href="http://res.beachvolleychania.com/schedule/new/101717">Κράτηση!</a>                    </td>
+                                        <td class='slot available' rowspan='6'>
+                        <span class="time">18:00-19:30</span><a href="http://res.beachvolleychania.com/schedule/new/101697">Κράτηση!</a>                    </td>
+                    </tr>
+<tr>
+<td class='time'>18:30</td>
+</tr>
+<tr>
+<td class='time'>18:45</td>
+</tr>
+<tr>
+<td class='time'>19:00</td>
+</tr>
+<tr>
+<td class='time'>19:15</td>
+</tr>
+<tr>
+<td class='time'>19:30</td>
+</tr>
+<tr>
+<td class='time'>19:45</td>
+                    <td class='slot available' rowspan='6'>
+                        <span class="time">19:30-21:00</span><a href="http://res.beachvolleychania.com/schedule/new/101708">Κράτηση!</a>                    </td>
+                                        <td class='slot available' rowspan='6'>
+                        <span class="time">19:30-21:00</span><a href="http://res.beachvolleychania.com/schedule/new/101713">Κράτηση!</a>                    </td>
+                                        <td class='slot available' rowspan='6'>
+                        <span class="time">19:30-21:00</span><a href="http://res.beachvolleychania.com/schedule/new/101703">Κράτηση!</a>                    </td>
+                                        <td class='slot available' rowspan='6'>
+                        <span class="time">19:30-21:00</span><a href="http://res.beachvolleychania.com/schedule/new/101718">Κράτηση!</a>                    </td>
+                                        <td class='slot available' rowspan='6'>
+                        <span class="time">19:30-21:00</span><a href="http://res.beachvolleychania.com/schedule/new/101698">Κράτηση!</a>                    </td>
+                    </tr>
+<tr>
+<td class='time'>20:00</td>
+</tr>
+<tr>
+<td class='time'>20:15</td>
+</tr>
+<tr>
+<td class='time'>20:30</td>
+</tr>
+<tr>
+<td class='time'>20:45</td>
+</tr>
+<tr>
+<td class='time'>21:00</td>
+</tr>
+        </tbody>
+    </table>
+    </div>
+            </div>
+            <div id="footer">
+                <div class="copyright">
+    <p style="text-align: right;">Α.Σ. Beach Volleyball Νέας Κυδωνίας Χανίων © 2010-2014</p>
+    <p style="text-align: right;">Σχεδιασμός &amp; Υλοποίηση : <a href="http://skevakis.com">Σκευάκης Γιάννης</a></p>
+</div>
+
+            </div>
+        </div>
+        <!---
+                        <div id="debug">
+            DEBUG                </div>
+                -->
+    </body>
+</html>
